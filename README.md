@@ -14,17 +14,164 @@ The primary aim of this project is to provide a complete Godot project written e
 
 ## Getting Started
 
-To get started with this project, follow these steps:
+## Getting Started
 
-1. Navigate to the ___source___ directory in your terminal.
-2. Run the command `swift build` to build the project.
-3. After the build is complete, locate the dynamic libraries:
-   - `libPlatformer3D.dylib`
-   - `libSwiftGodot.dylib`
-4. Copy these libraries to the ___bin___ directory located in the root of the project.
-5. Once the libraries are copied, you can open the project in Godot.
+Follow the steps below to build and run the project.
 
-Now you're ready to explore the code and run the game!
+### Requirements
+
+* macOS
+* Intel Mac (`x86_64`)
+* Swift 6.2 or later
+* Godot 4.6.x
+* SwiftGodot 0.75.0
+
+### 1. Download the SwiftGodot 0.75.0 SDK
+
+This project requires the **SwiftGodot 0.75.0 macOS x86_64 SDK**.
+
+Download it from:
+
+**SwiftGodot 0.75.0 macOS x86_64 SDK**
+https://github.com/crimson-aril/SwiftGodot-0.75.0-macOS-x86_64-SDK
+
+Extract the SDK to a convenient location, for example:
+
+```text
+/Users/<your-username>/SwiftGodotSDK
+```
+
+For example:
+
+```text
+/Users/jhon/SwiftGodotSDK
+```
+
+> **Important:** The path above is only an example. Use the actual path where you extracted the SDK.
+
+### 2. Configure SwiftGodot in `Package.swift`
+
+Open:
+
+```text
+source/Package.swift
+```
+
+Configure the SwiftGodot package dependency to point to the SDK you downloaded.
+
+For example:
+
+```swift
+.package(
+    path: "/Users/<your-username>/SwiftGodotSDK"
+)
+```
+
+Then make sure the `Platformer3D` target uses the `SwiftGodotSDK` product:
+
+```swift
+.product(
+    name: "SwiftGodotSDK",
+    package: "SwiftGodot-0.75.0-Distribution"
+)
+```
+
+> **Note:** The package name must match the package name defined by the SDK you downloaded. If the SDK uses a different package name, use that exact name in `package:`.
+
+### 3. Build the Swift Extension
+
+Enter the Swift package directory:
+
+```bash
+cd source
+```
+
+Build the project in debug mode:
+
+```bash
+swift build -c debug
+```
+
+The resulting dynamic library will be located at:
+
+```text
+source/.build/x86_64-apple-macosx/debug/libPlatformer3D.dylib
+```
+
+### 4. Copy the Extension to `bin`
+
+From the `source` directory, copy the generated library into the project's `bin` directory:
+
+```bash
+cp .build/x86_64-apple-macosx/debug/libPlatformer3D.dylib ../bin/
+```
+
+The project also requires the corresponding **SwiftGodot framework** to be available in the `bin` directory.
+
+Your project should have a structure similar to:
+
+```text
+Starter-Kit-3D-Platformer-Swift/
+├── bin/
+│   ├── libPlatformer3D.dylib
+│   └── SwiftGodot.framework/
+├── scenes/
+├── objects/
+├── source/
+│   ├── Package.swift
+│   └── Sources/
+└── project.godot
+```
+
+### 5. Open the Project in Godot
+
+Open the project directory in Godot:
+
+```text
+Starter-Kit-3D-Platformer-Swift/
+```
+
+The main scene is:
+
+```text
+scenes/main.tscn
+```
+
+Press **F6** to run the current scene, or **F5** to run the main project scene.
+
+## Controls
+
+| Input            | Action        |
+| ---------------- | ------------- |
+| `W`              | Move forward  |
+| `A`              | Move left     |
+| `S`              | Move backward |
+| `D`              | Move right    |
+| `Space`          | Jump          |
+| Trackpad / Mouse | Rotate camera |
+| `↑`              | Camera up     |
+| `↓`              | Camera down   |
+| `←`              | Camera left   |
+| `→`              | Camera right  |
+| `+`              | Zoom in       |
+| `−`              | Zoom out      |
+
+## Trackpad Support
+
+The third-person camera supports trackpad and mouse movement through Godot's `InputEventMouseMotion` events.
+
+SwiftGodot 0.75.0 exposes the relative pointer movement through:
+
+```swift
+motion.relative
+```
+
+The camera uses this relative movement to control horizontal and vertical camera rotation, allowing compatible trackpads and mice to control the camera without relying on Godot's mouse-capture API.
+
+## Ready to Go
+
+Once the SwiftGodot SDK is configured, the Swift extension is built and copied to `bin`, and the project is opened in Godot, you are ready to explore the code and run the game!
+
 
 ## Credits
 
