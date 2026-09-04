@@ -1,0 +1,4 @@
+framework module SwiftGodot {
+    umbrella header "SwiftGodot-Swift.h"
+    export *
+}
